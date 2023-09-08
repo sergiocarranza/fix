@@ -1,0 +1,22 @@
+# -- TO RUN ALL COMANDS IT'S NECCESARY TO BE ON 'source' FOLDER
+# -- IT A PRE-REQUISITE TO HAVE THE VERACODE CLI TOOL REFERENCED IN $PATH ENVIRONMENT VARIABLE, SO YOU CAN INVOKE IT FROM WHEREVER FOLDER IN YOUR LAPTOP
+# -- IT A PRE-REQUISITE TO HAVE INSTALLED PIPELINE SCAN TOOL. RUNNING PIPELINE SCAN IN YOUR DEMO WILL DEPEND WHERE YOU HAVE INSTALLED IT
+
+# -- Compile
+javac -g source/SQLvulnerability.java
+
+# -- Run SAST (Pipeline Scan) - This command will depend on the location you have installed Pipeline Scan
+# -- In my case I have pipeline scan installed in my veracode tools folder '~/tools/veracode'
+# -- Parameter -jo will generate the results.json file you will invoke when calling Veracode Fix
+# -- Parameter -esd will generate and will include stack dumps information of java app
+java -jar ~/tools/veracode/pipeline-scan.jar -f source/SQLvulnerability.class -jo true -esd true
+
+# -- Run fix
+veracode fix --results results.json source/SQLvulnerability.java
+
+# -- Recompile
+javac -g source/SQLvulnerability.java
+
+# -- Run SAST (Pipeline Scan) on new class file
+java -jar ~/tools/veracode/pipeline-scan.jar -f source/SQLvulnerability.class -jo true -esd true
+
